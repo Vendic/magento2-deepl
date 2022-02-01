@@ -43,11 +43,13 @@ class Deepl implements TranslatorInterface
 
     public function __construct(
         \Aromicon\Deepl\Helper\Config $config,
-        \Zend\Http\Client $client,
+        \Laminas\Http\Client $client,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->config = $config;
-        $this->client = $client;
+        $this->client = $client->setOptions([
+            'timeout' => $this->config->getTimeout()
+        ]);
         $this->logger = $logger;
     }
 
@@ -104,7 +106,7 @@ class Deepl implements TranslatorInterface
             $this->_handleError($result);
         }
 
-        $translate = json_decode($result->getContent(), true);
+        $translate = json_decode($result->getBody(), true);
 
         if (!isset($translate['translations'][0]['text'])) {
             throw new LocalizedException(__('Translation is empty.'));
@@ -135,7 +137,7 @@ class Deepl implements TranslatorInterface
             $this->_handleError($result);
         }
 
-        $usage = json_decode($result->getContent(), true);
+        $usage = json_decode($result->getBody(), true);
 
         if (!isset($usage['character_count'])) {
             throw new LocalizedException(__('Usage is empty.'));
