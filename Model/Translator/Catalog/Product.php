@@ -61,7 +61,7 @@ class Product
         $product = $this->productRepository->getById($productId, true, $toStoreId);
 
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
-        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
+        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
 
         $pageFields = $this->config->getTranslatableProductFields();
 
