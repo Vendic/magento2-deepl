@@ -6,31 +6,40 @@
  * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
  * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
  */
+
 namespace Aromicon\Deepl\Model\Translator\Catalog;
+
+use Aromicon\Deepl\Api\TranslatorInterface;
+use Aromicon\Deepl\Helper\Config;
+use Exception;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\Exception\LocalizedException;
 
 class Category
 {
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
-     * @var \Aromicon\Deepl\Api\TranslatorInterface
+     * @var TranslatorInterface
      */
     private $translator;
 
     /**
-     * @var \Aromicon\Deepl\Helper\Config
+     * @var Config
      */
     private $config;
 
     private $categoryResource;
 
     public function __construct(
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Aromicon\Deepl\Api\TranslatorInterface $translator,
-        \Aromicon\Deepl\Helper\Config $config,
+        CategoryRepositoryInterface $categoryRepository,
+        TranslatorInterface $translator,
+        Config $config,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource
     ) {
         $this->categoryRepository = $categoryRepository;
@@ -43,7 +52,7 @@ class Category
      * @param $productId int
      * @param $fromStoreId int
      * @param $toStoreId int
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function translateAndCopy($categoryId, $toStoreId)
     {
@@ -68,7 +77,15 @@ class Category
             }
 
             $category->setData($field, $translatedText);
-            $this->categoryResource->saveAttribute($category, $field);
+            $this->saveAttribute($category, $field);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function saveAttribute(CategoryInterface $category, string $field): AbstractEntity
+    {
+        return $this->categoryResource->saveAttribute($category, $field);
     }
 }
