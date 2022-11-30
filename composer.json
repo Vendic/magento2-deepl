@@ -7,7 +7,7 @@
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "2.0.0.15",
+    "version": "2.0.0.16",
     "license": [
 
     ],
