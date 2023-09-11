@@ -8,12 +8,18 @@
  */
 namespace Aromicon\Deepl\Helper;
 
+use Aromicon\Deepl\Model\System\Config\CategoryFields;
+use Aromicon\Deepl\Model\System\Config\PageFields;
+use Aromicon\Deepl\Model\System\Config\ProductFields;
 use Aromicon\Deepl\Model\System\Config\Version;
+use Locale;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
+use Magento\Store\Model\ScopeInterface;
 
-class Config extends \Magento\Framework\App\Helper\AbstractHelper
+class Config extends AbstractHelper
 {
     const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
     const XML_PATH_DEFAULT_STORE = 'deepl/general/store';
@@ -29,27 +35,28 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEEPL_LOG_ENABLE = 'deepl/log/enable_log';
     const XML_PATH_DEEPL_TIMEOUT = 'deepl/api/timeout';
     const XML_PATH_DEEPL_TAG_HANDLING = 'deepl/api/tag_handling';
+    const XML_PATH_DEEPL_IGNORE_TAG = 'deepl/api/ignore_tags';
 
     /**
-     * @var \Aromicon\Deepl\Model\System\Config\PageFields
+     * @var PageFields
      */
     private $pageFields;
 
     /**
-     * @var \Aromicon\Deepl\Model\System\Config\ProductFields
+     * @var ProductFields
      */
     private $productFields;
 
     /**
-     * @var \Aromicon\Deepl\Model\System\Config\ProductFields
+     * @var ProductFields
      */
     private $categoryFields;
 
     public function __construct(
         Context $context,
-        \Aromicon\Deepl\Model\System\Config\PageFields $pageFields,
-        \Aromicon\Deepl\Model\System\Config\ProductFields $productFields,
-        \Aromicon\Deepl\Model\System\Config\CategoryFields $categoryFields
+        PageFields $pageFields,
+        ProductFields $productFields,
+        CategoryFields $categoryFields
     ) {
         $this->pageFields = $pageFields;
         $this->productFields = $productFields;
@@ -65,14 +72,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $locale = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_LOCALE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
 
         $currentLocale = 'en';
         $languages = (new LanguageBundle())->get($currentLocale)['Languages'];
 
-        $language = \Locale::getPrimaryLanguage($locale);
+        $language = Locale::getPrimaryLanguage($locale);
 
         return  $languages[$language];
     }
@@ -85,7 +92,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $language = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_LOCALE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
 
@@ -114,7 +121,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $storeId = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_STORE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
 
@@ -154,7 +161,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_API_VERSION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -176,7 +183,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_API_KEY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -188,14 +195,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $fields = $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_CMS_PAGE_FIELDS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
 
         if (empty($fields)) {
             $fields = [];
             foreach ($this->pageFields->toOptionArray() as $item) {
                 $fields[] = $item['value'];
-            };
+            }
         } else {
             $fields = explode(',', $fields);
         }
@@ -210,14 +217,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $fields = $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_PRODUCT_FIELDS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
 
         if (empty($fields)) {
             $fields = [];
             foreach ($this->pageFields->toOptionArray() as $item) {
                 $fields[] = $item['value'];
-            };
+            }
         } else {
             $fields = explode(',', $fields);
         }
@@ -232,14 +239,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $fields = $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_CATEGORY_FIELDS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
 
         if (empty($fields)) {
             $fields = [];
             foreach ($this->pageFields->toOptionArray() as $item) {
                 $fields[] = $item['value'];
-            };
+            }
         } else {
             $fields = explode(',', $fields);
         }
@@ -254,7 +261,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_LOG_ENABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -265,7 +272,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_SPLIT_SENTENCE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -276,7 +283,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $formality = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_FORMALITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
 
         if (empty($formality)) {
@@ -293,7 +300,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $value = (int) $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_TIMEOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         return $value > 0 ? $value : 30;
     }
@@ -305,9 +312,19 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $value = $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_TAG_HANDLING,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
 
         return !empty($value) ? $value : 'xml';
+    }
+
+    public function getIgnoreTag(): string
+    {
+        $value = $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_IGNORE_TAG,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return !empty($value) ? $value : 'x';
     }
 }

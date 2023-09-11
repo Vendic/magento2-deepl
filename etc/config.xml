@@ -14,6 +14,7 @@
             <api>
                 <url>https://api.deepl.com/v2/</url>
                 <url_free>https://api-free.deepl.com/v2/</url_free>
+                <ignore_tags>x</ignore_tags>
             </api>
             <cms>
                 <page_fields>title,content,content_heading,meta_keywords,meta_description,meta_title,identifier</page_fields>

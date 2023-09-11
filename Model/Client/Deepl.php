@@ -117,6 +117,7 @@ class Deepl implements TranslatorInterface
             ->set('source_lang', $sourceLanguage)
             ->set('target_lang', $targetLanguage)
             ->set('tag_handling', $this->config->getTagHandling())
+            ->set('ignore_tags', $this->config->getIgnoreTag())
             ->set('preserve_formatting', 1)
             ->set('split_sentences', $this->config->getSplitSentences());
 

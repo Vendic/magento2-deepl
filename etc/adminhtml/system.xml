@@ -45,6 +45,14 @@
                     <label>Tag Handling</label>
                     <source_model>Aromicon\Deepl\Model\System\Config\TagHandling</source_model>
                 </field>
+                <field id="ignore_tag" translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Ignore tag</label>
+                    <depends>
+                        <field id="tag_handling">xml</field>
+                    </depends>
+                    <comment>Can be used to by wrapping text in a tag to prevent translation.</comment>
+                </field>
                 <field id="split_sentence" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Split Sentences</label>
                     <source_model>Aromicon\Deepl\Model\System\Config\SplitSentence</source_model>
