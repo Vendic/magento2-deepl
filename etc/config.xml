@@ -17,6 +17,7 @@
                 <ignore_tag>x</ignore_tag>
             </api>
             <cms>
+                <block_fields>title,content</block_fields>
                 <page_fields>title,content,content_heading,meta_keywords,meta_description,meta_title,identifier</page_fields>
             </cms>
             <product>
