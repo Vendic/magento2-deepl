@@ -66,7 +66,7 @@ class Deepl implements TranslatorInterface
 
     private Config $config;
     private Client $client;
-    private array $usage;
+    private array $usage = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -130,8 +130,7 @@ class Deepl implements TranslatorInterface
 
         $post = $request->getPost();
 
-        $post->set('auth_key', $this->config->getDeeplApiKey())
-            ->set('text', $text)
+        $post->set('text', $text)
             ->set('source_lang', $sourceLanguage)
             ->set('target_lang', $targetLanguage)
             ->set('tag_handling', $this->config->getTagHandling())
@@ -178,7 +177,6 @@ class Deepl implements TranslatorInterface
             ->setMethod(Request::METHOD_GET);
 
         $query = $request->getQuery();
-        $query->set('auth_key', $this->config->getDeeplApiKey());
 
         $request->setQuery($query);
         $result = $client->send($request);
@@ -224,7 +222,7 @@ class Deepl implements TranslatorInterface
      */
     public function getCharacterCount()
     {
-        if (!$this->usage) {
+        if (empty($this->usage)) {
             try {
                 $this->getUsage();
             } catch (LocalizedException $e) {
@@ -275,7 +273,9 @@ class Deepl implements TranslatorInterface
      */
     private function getClient(): Client
     {
-        return $this->client->setOptions(
+        return $this->client->setHeaders([
+            'Authorization' => 'DeepL-Auth-Key ' . $this->config->getDeeplApiKey(),
+        ])->setOptions(
             [
                 'timeout' => $this->config->getTimeout()
             ]
