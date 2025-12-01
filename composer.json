@@ -1,5 +1,5 @@
 {
-    "name": "aromicon/module-deepl",
+    "name": "vendic/module-deepl-forked",
     "description": "Magento 2 Extension for Translation via Deepl API",
     "require": {
         "php": "~8.1.0|~8.2.0|~8.3.0|~8.4.0",
