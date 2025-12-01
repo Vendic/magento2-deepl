@@ -10,6 +10,9 @@
     "license": [
 
     ],
+    "replace": {
+        "aromicon/module-deepl":"*"
+    },
     "autoload": {
         "files": [
             "registration.php"
