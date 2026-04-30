@@ -162,6 +162,10 @@ class Deepl implements TranslatorInterface
 
         $translatedText = str_replace(['{{{', '}}}'], ['{{', '}}'], $translate['translations'][0]['text']);
 
+        if (!str_contains($translatedText, '<')) {
+            $translatedText = html_entity_decode($translatedText, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
         return $this->replacePlaceholders($translatedText);
     }
 
